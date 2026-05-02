@@ -14,7 +14,6 @@ A full-stack secure E-Banking web application built with:
 
 ## 📋 Quick Navigation
 
-- 📖 **[Full Technical Documentation](TECHNICAL_DOCUMENTATION.md)** — Architecture, API endpoints, setup guide
 - 📝 **[Database Schema](database/schema.sql)** — SQL schema with relationships
 - 🧪 **[API Collection](docs/ebanking-api.postman_collection.json)** — Postman requests for all endpoints
 - 🎨 **[UML Diagrams](docs/uml/uml-diagrams.html)** — Use case, class, and sequence diagrams
