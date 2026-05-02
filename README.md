@@ -74,7 +74,6 @@ ebanking/
 │       └── uml-diagrams.html
 │
 ├── README.md                      # This file
-└── TECHNICAL_DOCUMENTATION.md     # ✨ NEW - Full reference docs
 ```
 
 ---
@@ -209,37 +208,6 @@ After running `database/schema.sql`:
 
 ---
 
-## 📚 API Overview
-
-All endpoints are documented in [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md).
-
-### Core Endpoints
-
-**Authentication** (no auth required)
-- `POST /api/auth/register` — Register new user
-- `POST /api/auth/login` — Login and receive tokens
-- `POST /api/auth/refresh` — Refresh expired token
-
-**Users** (auth required)
-- `GET /api/users/profile` — Get current user
-- `PUT /api/users/profile` — Update profile
-- `GET /api/users/dashboard` — Dashboard summary
-
-**Accounts** (auth required)
-- `GET /api/accounts` — List user accounts
-- `POST /api/accounts` — Create new account
-
-**Transactions** (auth required)
-- `POST /api/transactions/transfer` — Transfer money
-- `POST /api/transactions/bill-payment` — Pay bills
-- `GET /api/transactions` — Transaction history
-
-**Admin** (admin auth required)
-- `GET /api/admin/users` — List all users
-- `PUT /api/admin/users/:id` — Update user
-- `PATCH /api/admin/users/:id/deactivate` — Deactivate user
-
-Full reference: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#api-endpoints-reference)
 
 ---
 
@@ -385,7 +353,6 @@ SELECT * FROM users WHERE email = 'john.doe@example.com';
 
 4. **Enable HTTPS/SSL** (essential for banking)
 
-5. **Review security checklist** in [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#security-checklist)
 
 ### Deployment Steps
 
@@ -409,23 +376,12 @@ docker-compose up
 
 ## 📞 Support
 
-- 📖 **Documentation** → [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md)
 - 📝 **API Requests** → `docs/ebanking-api.postman_collection.json`
 - 🎨 **Architecture Diagrams** → `docs/uml/uml-diagrams.html`
 
 ---
 
 ## ✅ Recent Updates (2026-04-23)
-
-### Fixed Issues 🔧
-- ✅ Fixed security vulnerabilities (npm audit --force)
-- ✅ Implemented AuthContext global state management
-- ✅ Completed API service with all endpoints
-- ✅ Added JWT request/response interceptors
-- ✅ Created Error Boundary for React crash handling
-- ✅ Added environment validation utility
-- ✅ Created .gitignore to prevent credential leaks
-- ✅ Added comprehensive technical documentation
 
 ### What's Working 🟢
 - ✅ User registration and login
