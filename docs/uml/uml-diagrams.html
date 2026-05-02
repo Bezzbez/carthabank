@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>E-Banking UML Diagrams</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:       #0a0e1a;
+    --bg2:      #111827;
+    --bg3:      #141d2e;
+    --gold:     #c9a84c;
+    --gold2:    #e8c97a;
+    --text:     #e8eaf2;
+    --muted:    #8892a4;
+    --border:   rgba(255,255,255,0.08);
+    --success:  #10b981;
+    --info:     #3b82f6;
+    --warning:  #f59e0b;
+    --danger:   #ef4444;
+    --purple:   #a78bfa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 48px 32px; max-width: 1200px; margin: 0 auto; }
+
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: var(--gold); margin-bottom: 6px; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--text); margin: 48px 0 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  h3 { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 28px 0 14px; }
+
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 48px; }
+  .diagram-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 36px; overflow-x: auto; }
+  .diagram-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+
+  /* ── Use Case SVG styles ── */
+  .uml-svg text { font-family: 'DM Sans', sans-serif; }
+
+  /* ── Class boxes ── */
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .class-box { background: var(--bg2); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 0.85rem; }
+  .class-header { padding: 10px 16px; text-align: center; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.03em; }
+  .class-header.entity   { background: rgba(59,130,246,0.18); border-bottom: 1.5px solid rgba(59,130,246,0.35); color: #93c5fd; }
+  .class-header.admin-c  { background: rgba(167,139,250,0.18); border-bottom: 1.5px solid rgba(167,139,250,0.35); color: #c4b5fd; }
+  .class-header.value    { background: rgba(16,185,129,0.18); border-bottom: 1.5px solid rgba(16,185,129,0.35); color: #6ee7b7; }
+  .class-section { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .class-section:last-child { border-bottom: none; }
+  .class-attr { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; }
+  .attr-visibility { font-family: 'DM Mono', monospace; color: var(--gold); font-size: 0.82rem; flex-shrink: 0; }
+  .attr-name { color: var(--text); font-size: 0.82rem; }
+  .attr-type { color: var(--muted); font-size: 0.75rem; margin-left: auto; font-family: 'DM Mono', monospace; }
+  .method-name { color: #93c5fd; font-size: 0.82rem; font-family: 'DM Mono', monospace; }
+
+  /* ── Relationships ── */
+  .rel-list { display: flex; flex-direction: column; gap: 8px; }
+  .rel-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg2); border-radius: 8px; font-size: 0.85rem; }
+  .rel-from { color: #93c5fd; font-weight: 600; }
+  .rel-arrow { color: var(--gold); font-family: 'DM Mono', monospace; font-size: 1rem; }
+  .rel-to   { color: #6ee7b7; font-weight: 600; }
+  .rel-mult { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.78rem; }
+  .rel-label { color: var(--muted); font-size: 0.78rem; font-style: italic; }
+
+  /* ── Sequence ── */
+  .seq-wrapper { overflow-x: auto; padding-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<h1>E-Banking UML Diagrams</h1>
+<p class="subtitle">Sprint 0 — Design & Architecture · SecureBank Platform</p>
+
+<!-- ════════════════════════════════════════════════════════════
+     1. USE CASE DIAGRAM
+     ════════════════════════════════════════════════════════════ -->
+<h2>1. Use Case Diagram</h2>
+
+<div class="diagram-card">
+  <div class="diagram-label">Actors &amp; System Use Cases</div>
+  <svg class="uml-svg" viewBox="0 0 980 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:760px;height:auto">
+    <defs>
+      <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0,10 3.5,0 7" fill="#8892a4"/>
+      </marker>
+      <marker id="arr-gold" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0,10 3.5,0 7" fill="#c9a84c"/>
+      </marker>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- System boundary -->
+    <rect x="200" y="30" width="600" height="560" rx="12" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+    <text x="490" y="22" text-anchor="middle" font-size="13" fill="#c9a84c" font-weight="600" font-family="DM Sans,sans-serif">«system» SecureBank E-Banking Platform</text>
+
+    <!-- ── CLIENT Actor ── -->
+    <!-- Head -->
+    <circle cx="72" cy="110" r="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <!-- Body -->
+    <line x1="72" y1="128" x2="72" y2="175" stroke="#3b82f6" stroke-width="2"/>
+    <!-- Arms -->
+    <line x1="45" y1="148" x2="99" y2="148" stroke="#3b82f6" stroke-width="2"/>
+    <!-- Legs -->
+    <line x1="72" y1="175" x2="52" y2="205" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="72" y1="175" x2="92" y2="205" stroke="#3b82f6" stroke-width="2"/>
+    <text x="72" y="224" text-anchor="middle" font-size="13" fill="#93c5fd" font-weight="600" font-family="DM Sans,sans-serif">Client</text>
+
+    <!-- ── ADMIN Actor ── -->
+    <circle cx="910" cy="110" r="18" fill="none" stroke="#a78bfa" stroke-width="2"/>
+    <line x1="910" y1="128" x2="910" y2="175" stroke="#a78bfa" stroke-width="2"/>
+    <line x1="883" y1="148" x2="937" y2="148" stroke="#a78bfa" stroke-width="2"/>
+    <line x1="910" y1="175" x2="890" y2="205" stroke="#a78bfa" stroke-width="2"/>
+    <line x1="910" y1="175" x2="930" y2="205" stroke="#a78bfa" stroke-width="2"/>
+    <text x="910" y="224" text-anchor="middle" font-size="13" fill="#c4b5fd" font-weight="600" font-family="DM Sans,sans-serif">Admin</text>
+
+    <!-- ── USE CASES (ellipses) ── -->
+    <!-- Client use cases -->
+    <ellipse cx="390" cy="90"  rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="94" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Register</text>
+
+    <ellipse cx="390" cy="155" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="159" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Login</text>
+
+    <ellipse cx="390" cy="220" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="224" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">View Balance</text>
+
+    <ellipse cx="390" cy="285" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="289" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Transfer Money</text>
+
+    <ellipse cx="390" cy="350" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="354" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">View Transactions</text>
+
+    <ellipse cx="390" cy="415" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="419" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Pay Bills</text>
+
+    <ellipse cx="390" cy="480" rx="100" ry="26" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="390" y="484" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Edit Profile</text>
+
+    <!-- Shared -->
+    <ellipse cx="580" cy="285" rx="110" ry="26" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <text x="580" y="281" text-anchor="middle" font-size="11" fill="#c9a84c" font-family="DM Sans,sans-serif">«include»</text>
+    <text x="580" y="296" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Verify OTP (2FA)</text>
+
+    <!-- Admin use cases -->
+    <ellipse cx="730" cy="155" rx="110" ry="26" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="730" y="159" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Manage Users</text>
+
+    <ellipse cx="730" cy="220" rx="110" ry="26" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="730" y="224" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Monitor Transactions</text>
+
+    <ellipse cx="730" cy="285" rx="110" ry="26" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="730" y="289" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">Activate / Deactivate User</text>
+
+    <ellipse cx="730" cy="350" rx="110" ry="26" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="730" y="354" text-anchor="middle" font-size="12" fill="#e8eaf2" font-family="DM Sans,sans-serif">View Dashboard Stats</text>
+
+    <!-- ── Associations: Client → Use Cases ── -->
+    <line x1="90"  y1="118" x2="289" y2="90"  stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="130" x2="289" y2="155" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="148" x2="289" y2="220" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="155" x2="289" y2="285" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="162" x2="289" y2="350" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="170" x2="289" y2="415" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+    <line x1="90"  y1="178" x2="289" y2="480" stroke="#3b82f6" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- Transfer → OTP include -->
+    <line x1="490" y1="285" x2="469" y2="285" stroke="#c9a84c" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-gold)"/>
+    <!-- Pay Bills → OTP include -->
+    <line x1="460" y1="405" x2="546" y2="299" stroke="#c9a84c" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-gold)"/>
+    <text x="508" y="356" font-size="10" fill="#c9a84c" font-family="DM Sans,sans-serif">«include»</text>
+
+    <!-- ── Associations: Admin → Use Cases ── -->
+    <line x1="893" y1="128" x2="841" y2="155" stroke="#a78bfa" stroke-width="1.2" opacity="0.7"/>
+    <line x1="893" y1="140" x2="841" y2="220" stroke="#a78bfa" stroke-width="1.2" opacity="0.7"/>
+    <line x1="893" y1="148" x2="841" y2="285" stroke="#a78bfa" stroke-width="1.2" opacity="0.7"/>
+    <line x1="893" y1="155" x2="841" y2="350" stroke="#a78bfa" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- Admin also accesses Login -->
+    <line x1="880" y1="118" x2="491" y2="155" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+    <!-- Legend -->
+    <rect x="212" y="530" width="570" height="55" rx="8" fill="rgba(255,255,255,0.03)" stroke="var(--border)" stroke-width="1"/>
+    <circle cx="232" cy="555" r="8" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="246" y="559" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Client actor</text>
+    <circle cx="330" cy="555" r="8" fill="none" stroke="#a78bfa" stroke-width="2"/>
+    <text x="344" y="559" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Admin actor</text>
+    <ellipse cx="440" cy="555" rx="20" ry="10" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="466" y="559" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Client use case</text>
+    <ellipse cx="570" cy="555" rx="20" ry="10" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.2"/>
+    <text x="596" y="559" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Admin use case</text>
+    <line x1="670" y1="555" x2="700" y2="555" stroke="#c9a84c" stroke-width="1.2" stroke-dasharray="5,3"/>
+    <text x="706" y="559" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">«include»</text>
+  </svg>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     2. CLASS DIAGRAM
+     ════════════════════════════════════════════════════════════ -->
+<h2>2. Class Diagram</h2>
+
+<div class="diagram-card">
+  <div class="diagram-label">Domain Model — Classes &amp; Relationships</div>
+
+  <h3>Classes</h3>
+  <div class="class-grid">
+
+    <!-- User -->
+    <div class="class-box">
+      <div class="class-header entity">User</div>
+      <div class="class-section">
+        <div class="attr-visibility" style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">— attributes —</div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">id</span><span class="attr-type">UUID</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">firstName</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">lastName</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">email</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">password</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">phone</span><span class="attr-type">String?</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">role</span><span class="attr-type">Enum</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">isActive</span><span class="attr-type">Boolean</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">lastLoginAt</span><span class="attr-type">Date?</span></div>
+      </div>
+      <div class="class-section">
+        <div class="attr-visibility" style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">— methods —</div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">comparePassword(plain): bool</span></div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">toSafeObject(): Object</span></div>
+      </div>
+    </div>
+
+    <!-- Admin (inherits User) -->
+    <div class="class-box">
+      <div class="class-header admin-c">Admin</div>
+      <div class="class-section">
+        <div style="font-size:0.75rem;color:var(--muted);font-style:italic;padding:4px 0">extends User</div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">role</span><span class="attr-type">= "admin"</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">permissions</span><span class="attr-type">String[]</span></div>
+      </div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">getStats(): Object</span></div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">toggleUserStatus(id): User</span></div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">getAllTransactions(): List</span></div>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div class="class-box">
+      <div class="class-header value">Account</div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">id</span><span class="attr-type">UUID</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">accountNumber</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">type</span><span class="attr-type">Enum</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">balance</span><span class="attr-type">Decimal</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">currency</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">isActive</span><span class="attr-type">Boolean</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">userId</span><span class="attr-type">UUID (FK)</span></div>
+      </div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">generateAccountNumber(): String</span></div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">hasSufficientFunds(amt): bool</span></div>
+      </div>
+    </div>
+
+    <!-- Transaction -->
+    <div class="class-box">
+      <div class="class-header entity" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:#6ee7b7">Transaction</div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">id</span><span class="attr-type">UUID</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">reference</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">type</span><span class="attr-type">Enum</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">amount</span><span class="attr-type">Decimal</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">currency</span><span class="attr-type">String</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">status</span><span class="attr-type">Enum</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">fromAccountId</span><span class="attr-type">UUID?</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">toAccountId</span><span class="attr-type">UUID?</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">balanceAfter</span><span class="attr-type">Decimal?</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">ipAddress</span><span class="attr-type">String?</span></div>
+      </div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">generateReference(): String</span></div>
+      </div>
+    </div>
+
+    <!-- OTP -->
+    <div class="class-box">
+      <div class="class-header entity" style="background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.3);color:#fcd34d">OTP</div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">id</span><span class="attr-type">UUID</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">userId</span><span class="attr-type">UUID (FK)</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">code</span><span class="attr-type">String(6)</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">purpose</span><span class="attr-type">Enum</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">expiresAt</span><span class="attr-type">Date</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">isUsed</span><span class="attr-type">Boolean</span></div>
+        <div class="class-attr"><span class="attr-visibility">-</span><span class="attr-name">attempts</span><span class="attr-type">Integer</span></div>
+      </div>
+      <div class="class-section">
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">isExpired(): Boolean</span></div>
+        <div class="class-attr"><span class="attr-visibility">+</span><span class="method-name">isValid(code): Boolean</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <h3 style="margin-top:32px">Relationships</h3>
+  <div class="rel-list">
+    <div class="rel-item">
+      <span class="rel-from">User</span>
+      <span class="rel-arrow">——————————&lt;</span>
+      <span class="rel-to">Account</span>
+      <span class="rel-mult">1 .. *</span>
+      <span class="rel-label">A user owns one or more accounts</span>
+    </div>
+    <div class="rel-item">
+      <span class="rel-from">Account</span>
+      <span class="rel-arrow">——————————&lt;</span>
+      <span class="rel-to">Transaction</span>
+      <span class="rel-mult">1 .. *</span>
+      <span class="rel-label">An account has many transactions (as source or destination)</span>
+    </div>
+    <div class="rel-item">
+      <span class="rel-from">User</span>
+      <span class="rel-arrow">——————————&lt;</span>
+      <span class="rel-to">OTP</span>
+      <span class="rel-mult">1 .. *</span>
+      <span class="rel-label">A user can have multiple OTPs (one active at a time per purpose)</span>
+    </div>
+    <div class="rel-item">
+      <span class="rel-from">Admin</span>
+      <span class="rel-arrow">△————————</span>
+      <span class="rel-to">User</span>
+      <span class="rel-mult">inheritance</span>
+      <span class="rel-label">Admin inherits all User attributes + extended admin capabilities</span>
+    </div>
+    <div class="rel-item">
+      <span class="rel-from">Transaction</span>
+      <span class="rel-arrow">————————&gt;</span>
+      <span class="rel-to">Account (from)</span>
+      <span class="rel-mult">0..1</span>
+      <span class="rel-label">Optional source account (null for deposits)</span>
+    </div>
+    <div class="rel-item">
+      <span class="rel-from">Transaction</span>
+      <span class="rel-arrow">————————&gt;</span>
+      <span class="rel-to">Account (to)</span>
+      <span class="rel-mult">0..1</span>
+      <span class="rel-label">Optional destination account (null for withdrawals)</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     3. SEQUENCE DIAGRAM — Money Transfer
+     ════════════════════════════════════════════════════════════ -->
+<h2>3. Sequence Diagram — Money Transfer (with 2FA)</h2>
+
+<div class="diagram-card">
+  <div class="diagram-label">Scenario: Client transfers money · Includes OTP verification</div>
+  <div class="seq-wrapper">
+  <svg viewBox="0 0 980 760" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:860px;height:auto">
+    <defs>
+      <marker id="sarr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#8892a4"/>
+      </marker>
+      <marker id="sarr-gold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#c9a84c"/>
+      </marker>
+      <marker id="sarr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#10b981"/>
+      </marker>
+      <marker id="sarr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#ef4444"/>
+      </marker>
+    </defs>
+
+    <!-- Participant boxes -->
+    <g font-family="DM Sans,sans-serif" font-size="12" font-weight="600">
+      <!-- Client -->
+      <rect x="30" y="20" width="100" height="36" rx="6" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="80" y="43" text-anchor="middle" fill="#93c5fd">Client</text>
+      <!-- React UI -->
+      <rect x="190" y="20" width="100" height="36" rx="6" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.5"/>
+      <text x="240" y="43" text-anchor="middle" fill="#6ee7b7">React UI</text>
+      <!-- Express API -->
+      <rect x="380" y="20" width="120" height="36" rx="6" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="440" y="43" text-anchor="middle" fill="#fcd34d">Express API</text>
+      <!-- OTP Service -->
+      <rect x="580" y="20" width="120" height="36" rx="6" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1.5"/>
+      <text x="640" y="43" text-anchor="middle" fill="#c9a84c">OTP Service</text>
+      <!-- Database -->
+      <rect x="780" y="20" width="110" height="36" rx="6" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="835" y="43" text-anchor="middle" fill="#c4b5fd">Database</text>
+    </g>
+
+    <!-- Lifelines -->
+    <line x1="80"  y1="56" x2="80"  y2="750" stroke="#3b82f6" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+    <line x1="240" y1="56" x2="240" y2="750" stroke="#10b981" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+    <line x1="440" y1="56" x2="440" y2="750" stroke="#f59e0b" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+    <line x1="640" y1="56" x2="640" y2="750" stroke="#c9a84c" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+    <line x1="835" y1="56" x2="835" y2="750" stroke="#a78bfa" stroke-width="1" stroke-dasharray="5,4" opacity="0.4"/>
+
+    <!-- ── STEP 1: Fill form ── -->
+    <text x="20" y="95" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">1.</text>
+    <line x1="80" y1="90" x2="232" y2="90" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="155" y="84" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">Fill transfer form</text>
+
+    <!-- ── STEP 2: Request OTP ── -->
+    <text x="20" y="128" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">2.</text>
+    <line x1="240" y1="123" x2="432" y2="123" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#sarr-gold)"/>
+    <text x="335" y="117" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">POST /transactions/otp/request</text>
+    <text x="335" y="130" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">+ Bearer JWT token</text>
+
+    <!-- API verifies JWT -->
+    <rect x="400" y="138" width="80" height="22" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+    <text x="440" y="153" text-anchor="middle" font-size="10" fill="#fcd34d" font-family="DM Sans,sans-serif">Verify JWT</text>
+
+    <!-- API → OTP Service -->
+    <line x1="440" y1="160" x2="632" y2="160" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#sarr-gold)"/>
+    <text x="535" y="154" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">generateOTP(userId, 'transfer')</text>
+
+    <!-- OTP → DB save -->
+    <line x1="640" y1="175" x2="827" y2="175" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="733" y="169" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">INSERT otp record</text>
+
+    <!-- OTP console log -->
+    <rect x="580" y="185" width="140" height="22" rx="4" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="1"/>
+    <text x="650" y="200" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Sans,sans-serif">Log OTP to console / email</text>
+
+    <!-- Response back -->
+    <line x1="632" y1="215" x2="448" y2="215" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr)"/>
+    <text x="535" y="209" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">OTP generated</text>
+    <line x1="432" y1="228" x2="248" y2="228" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr)"/>
+    <text x="335" y="222" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">200 OK — "OTP sent"</text>
+
+    <!-- UI shows OTP input -->
+    <rect x="185" y="238" width="115" height="22" rx="4" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1"/>
+    <text x="242" y="253" text-anchor="middle" font-size="10" fill="#6ee7b7" font-family="DM Sans,sans-serif">Show OTP input + timer</text>
+
+    <!-- ── STEP 3: User enters OTP ── -->
+    <text x="20" y="288" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">3.</text>
+    <line x1="80" y1="283" x2="232" y2="283" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="155" y="277" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">Enter 6-digit OTP</text>
+
+    <!-- ── STEP 4: Submit transfer ── -->
+    <text x="20" y="320" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">4.</text>
+    <line x1="240" y1="315" x2="432" y2="315" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#sarr-gold)"/>
+    <text x="335" y="308" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">POST /transactions/transfer</text>
+    <text x="335" y="322" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">{ fromAccountId, toAccountNumber, amount, otpCode }</text>
+
+    <!-- API → Verify OTP ── -->
+    <line x1="440" y1="340" x2="632" y2="340" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="535" y="334" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">verifyOTP(userId, 'transfer', code)</text>
+
+    <!-- OTP check DB -->
+    <line x1="640" y1="355" x2="827" y2="355" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="733" y="349" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">SELECT otp WHERE not expired</text>
+
+    <!-- DB returns -->
+    <line x1="827" y1="368" x2="648" y2="368" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr)"/>
+    <text x="733" y="362" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">OTP record</text>
+
+    <!-- OTP valid? -->
+    <rect x="580" y="375" width="140" height="22" rx="4" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1"/>
+    <text x="650" y="390" text-anchor="middle" font-size="10" fill="#6ee7b7" font-family="DM Sans,sans-serif">code matches? mark isUsed=true</text>
+
+    <!-- OTP response -->
+    <line x1="632" y1="405" x2="448" y2="405" stroke="#10b981" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr-green)"/>
+    <text x="535" y="399" text-anchor="middle" font-size="10" fill="#10b981" font-family="DM Sans,sans-serif">{ valid: true }</text>
+
+    <!-- ── STEP 5: Execute transfer (DB Transaction) ── -->
+    <text x="20" y="438" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">5.</text>
+    <rect x="395" y="430" width="90" height="22" rx="4" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1"/>
+    <text x="440" y="445" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Sans,sans-serif">BEGIN TRANSACTION</text>
+
+    <!-- Fetch source account (locked) -->
+    <line x1="440" y1="460" x2="827" y2="460" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="633" y="454" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">SELECT account WHERE id=fromId FOR UPDATE</text>
+
+    <line x1="827" y1="473" x2="448" y2="473" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr)"/>
+    <text x="633" y="467" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">Source account (locked)</text>
+
+    <!-- Fetch destination account (locked) -->
+    <line x1="440" y1="490" x2="827" y2="490" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="633" y="484" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">SELECT account WHERE accountNumber=toNo FOR UPDATE</text>
+
+    <line x1="827" y1="503" x2="448" y2="503" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#sarr)"/>
+    <text x="633" y="497" text-anchor="middle" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">Dest. account (locked)</text>
+
+    <!-- Balance check -->
+    <rect x="395" y="510" width="90" height="22" rx="4" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1"/>
+    <text x="440" y="525" text-anchor="middle" font-size="10" fill="#fca5a5" font-family="DM Sans,sans-serif">Check balance ≥ amount</text>
+
+    <!-- Debit source -->
+    <line x1="440" y1="542" x2="827" y2="542" stroke="#ef4444" stroke-width="1.5" marker-end="url(#sarr-red)"/>
+    <text x="633" y="536" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">UPDATE account SET balance -= amount (source)</text>
+
+    <!-- Credit dest -->
+    <line x1="440" y1="558" x2="827" y2="558" stroke="#10b981" stroke-width="1.5" marker-end="url(#sarr-green)"/>
+    <text x="633" y="552" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">UPDATE account SET balance += amount (dest)</text>
+
+    <!-- Insert transaction record -->
+    <line x1="440" y1="574" x2="827" y2="574" stroke="#8892a4" stroke-width="1.5" marker-end="url(#sarr)"/>
+    <text x="633" y="568" text-anchor="middle" font-size="11" fill="#e8eaf2" font-family="DM Sans,sans-serif">INSERT INTO transactions (reference, amount, status='completed'…)</text>
+
+    <!-- COMMIT -->
+    <rect x="395" y="583" width="90" height="22" rx="4" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1"/>
+    <text x="440" y="598" text-anchor="middle" font-size="10" fill="#6ee7b7" font-family="DM Sans,sans-serif">COMMIT</text>
+
+    <!-- ── STEP 6: Responses ── -->
+    <text x="20" y="633" font-size="10" fill="#8892a4" font-family="DM Mono,monospace">6.</text>
+    <line x1="432" y1="628" x2="248" y2="628" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#sarr-green)"/>
+    <text x="335" y="621" text-anchor="middle" font-size="11" fill="#6ee7b7" font-family="DM Sans,sans-serif">201 { transaction, newBalance }</text>
+
+    <line x1="232" y1="648" x2="88" y2="648" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#sarr-green)"/>
+    <text x="155" y="641" text-anchor="middle" font-size="11" fill="#6ee7b7" font-family="DM Sans,sans-serif">Show success screen</text>
+
+    <!-- Legend -->
+    <rect x="30" y="680" width="900" height="65" rx="8" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <line x1="50"  y1="705" x2="90"  y2="705" stroke="#c9a84c" stroke-width="1.5"/>
+    <text x="96"  y="709" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">HTTP request</text>
+    <line x1="160" y1="705" x2="200" y2="705" stroke="#8892a4" stroke-width="1" stroke-dasharray="5,3"/>
+    <text x="206" y="709" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">HTTP response</text>
+    <line x1="290" y1="705" x2="330" y2="705" stroke="#10b981" stroke-width="1.5"/>
+    <text x="336" y="709" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">Success path</text>
+    <line x1="410" y1="705" x2="450" y2="705" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="456" y="709" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">Debit operation</text>
+    <text x="50"  y="735" font-size="10" fill="#8892a4" font-family="DM Sans,sans-serif">Note: Steps 5 run inside a single DB TRANSACTION — if any step fails, the entire operation is rolled back atomically.</text>
+  </svg>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     4. ARCHITECTURE OVERVIEW
+     ════════════════════════════════════════════════════════════ -->
+<h2>4. MVC Architecture Overview</h2>
+<div class="diagram-card">
+  <div class="diagram-label">Full-Stack Layer Diagram</div>
+  <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:700px;height:auto">
+    <defs>
+      <marker id="aarr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#c9a84c"/>
+      </marker>
+    </defs>
+    <!-- VIEW -->
+    <rect x="20" y="60" width="220" height="180" rx="10" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="130" y="88" text-anchor="middle" font-size="13" fill="#6ee7b7" font-weight="600" font-family="DM Sans,sans-serif">VIEW — React.js</text>
+    <text x="130" y="110" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">LoginPage</text>
+    <text x="130" y="128" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">DashboardPage</text>
+    <text x="130" y="146" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">TransferPage</text>
+    <text x="130" y="164" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">TransactionHistoryPage</text>
+    <text x="130" y="182" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">BillPaymentPage</text>
+    <text x="130" y="200" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">AdminDashboardPage</text>
+    <text x="130" y="222" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">Axios + React Router</text>
+
+    <!-- Arrows VIEW → CONTROLLER -->
+    <line x1="240" y1="150" x2="310" y2="150" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#aarr)"/>
+    <text x="273" y="143" font-size="9" fill="#c9a84c" font-family="DM Sans,sans-serif" text-anchor="middle">REST API</text>
+
+    <!-- CONTROLLER -->
+    <rect x="310" y="60" width="280" height="180" rx="10" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="450" y="88" text-anchor="middle" font-size="13" fill="#fcd34d" font-weight="600" font-family="DM Sans,sans-serif">CONTROLLER — Express.js</text>
+    <text x="450" y="110" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">AuthController</text>
+    <text x="450" y="128" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">UserController</text>
+    <text x="450" y="146" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">TransactionController</text>
+    <text x="450" y="164" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">AdminController</text>
+    <text x="450" y="185" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">JWT Middleware · Rate Limiter</text>
+    <text x="450" y="201" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">OTP Service · Error Handler</text>
+    <text x="450" y="222" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">Helmet · CORS · Winston</text>
+
+    <!-- Arrows CONTROLLER → MODEL -->
+    <line x1="590" y1="150" x2="660" y2="150" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#aarr)"/>
+    <text x="623" y="143" font-size="9" fill="#c9a84c" font-family="DM Sans,sans-serif" text-anchor="middle">Sequelize</text>
+
+    <!-- MODEL -->
+    <rect x="660" y="60" width="220" height="180" rx="10" fill="rgba(167,139,250,0.08)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="770" y="88" text-anchor="middle" font-size="13" fill="#c4b5fd" font-weight="600" font-family="DM Sans,sans-serif">MODEL — MySQL</text>
+    <text x="770" y="110" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">User</text>
+    <text x="770" y="128" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Account</text>
+    <text x="770" y="146" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">Transaction</text>
+    <text x="770" y="164" text-anchor="middle" font-size="11" fill="#8892a4" font-family="DM Sans,sans-serif">OTP</text>
+    <text x="770" y="185" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">Atomic Transactions</text>
+    <text x="770" y="201" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">Row-level locking</text>
+    <text x="770" y="222" text-anchor="middle" font-size="10" fill="#c9a84c" font-family="DM Mono,monospace">Indexed queries</text>
+
+    <!-- Labels -->
+    <text x="130" y="50" text-anchor="middle" font-size="11" fill="#10b981" font-family="DM Mono,monospace" font-weight="600">PORT :3000</text>
+    <text x="450" y="50" text-anchor="middle" font-size="11" fill="#f59e0b" font-family="DM Mono,monospace" font-weight="600">PORT :5000</text>
+    <text x="770" y="50" text-anchor="middle" font-size="11" fill="#a78bfa" font-family="DM Mono,monospace" font-weight="600">PORT :3306</text>
+  </svg>
+</div>
+
+<p style="font-size:0.8rem;color:var(--muted);text-align:center;margin-top:24px;padding-bottom:40px">
+  Generated for Sprint 0 — E-Banking Project · SecureBank Platform · April 2026
+</p>
+
+</body>
+</html>
